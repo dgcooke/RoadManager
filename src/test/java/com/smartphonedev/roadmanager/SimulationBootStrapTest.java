@@ -35,6 +35,39 @@ class SimulationBootStrapTest {
     }
 
     @Test
+    protected void calculateTotalOfAllCarsReturnsValidResponseWhenValidArguments() throws InvalidInputException {
+        var args = new String[]{"sample.txt"};
+        var values = new String[]{"2016-12-05T12:30:00 6", "2016-12-05T13:30:00 9", "2016-12-05T14:30:00 11"};
+        final var simulatorInstance = new SimulationBootStrap(args);
+        final Class<?> simulatorClass = simulatorInstance.getClass();
+
+        //when
+        try
+        {
+            final var calculateTotalOfAllCars = simulatorClass.getDeclaredMethod("calculateTotalOfAllCars", List.class);
+            calculateTotalOfAllCars.setAccessible(true);
+
+
+
+            var result = (Integer) calculateTotalOfAllCars.invoke(simulatorInstance, Arrays.asList(values));
+
+            //then
+            assertThat(result).isNotNull().isInstanceOf(Integer.class);
+            assertThat(result).isEqualTo(26);
+
+        }catch (NoSuchMethodException nsme)
+        {
+            fail();
+        }catch (IllegalAccessException iae)
+        {
+            fail();
+        }catch (InvocationTargetException ite)
+        {
+            fail();
+        }
+    }
+
+    @Test
     protected void getPeriodsCountReturnsTrueWhenCountIsCorrect() throws InvalidInputException {
         //given
         var args = new String[]{"sample.txt"};
@@ -105,24 +138,4 @@ class SimulationBootStrapTest {
         }
 
     }
-
-
-    @Test
-    @Disabled
-    protected void bootStrapFailsIfEveryRowDoesNotHaveValidData() throws IOException, InvalidInputException {
-
-//        //given
-//        var args = new String[]{"sample.txt"};
-//        var simulatorBootstrap = new SimulationBootStrap(args);
-//        BufferedReader bufferedReader = Mockito.mock(BufferedReader.class);
-//        Mockito.when(bufferedReader.readLine()).thenReturn("line1", "line2", "line3");
-//
-//        //when
-//        Executable executable = () -> simulatorBootstrap.startSimulation(inputStream);
-//
-//        //then
-//        assertThrows(InvalidInputException.class ,executable);
-
-    }
-
 }
